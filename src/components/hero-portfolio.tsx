@@ -1,223 +1,135 @@
-import { motion } from 'framer-motion';
-import { Bot, Code2, Zap, ArrowRight, ExternalLink } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import { SplineScene } from '@/components/ui/splite';
-import { SpotlightCard } from '@/components/ui/spotlight';
 import { Button } from '@/components/ui/button';
-
-const featureBadges = [
-  { icon: Code2, label: 'Frontend' },
-  { icon: Bot, label: 'Automações' },
-  { icon: Zap, label: 'Performance' },
-];
-
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' as const },
-  },
-};
+import { Spotlight } from '@/components/ui/spotlight';
+import { GooeyText } from '@/components/ui/gooey-text-morphing';
 
 export function HeroAutomation() {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Função para Rolagem Suave
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      // Ajuste o block: 'start' para alinhar o topo da seção com o topo da tela
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2, delayChildren: 0.3 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        duration: 0.8, 
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number] 
+      } 
+    }
+  };
+
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-background flex items-center">
-      {/* Background grid */}
-      <div className="absolute inset-0 bg-grid opacity-40" />
-
-      {/* Radial glow from center-left */}
-      <div className="absolute inset-0 gradient-radial-glow" />
-
-      {/* Top accent line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--primary) / 0.4), transparent)' }}
-      />
-
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20 lg:py-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 items-center min-h-screen">
-
-          {/* ── LEFT: Text Content ── */}
+    <>
+      {/* ── TELA DE CARREGAMENTO (PRELOADER) ── */}
+      <AnimatePresence>
+        {!isLoaded && (
           <motion.div
-            className="flex flex-col gap-8 lg:pr-12"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black"
           >
-            {/* Role tag */}
-            <motion.div variants={itemVariants}>
-              <span
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-mono tracking-widest"
-                style={{
-                  borderColor: 'hsl(var(--primary) / 0.3)',
-                  background: 'hsl(var(--primary) / 0.05)',
-                  color: 'hsl(var(--primary))',
-                }}
-              >
-                <motion.span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: 'hsl(var(--primary))' }}
-                  animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                />
-                FULLSTACK_DEVELOPER
-              </span>
+            <div className="flex items-center gap-3 text-zinc-400 font-mono text-sm tracking-widest">
+              <span className="w-2 h-2 bg-violet-500 rounded-full animate-pulse" />
+              SYSTEM INITIALIZING...
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <section className="relative w-full h-screen overflow-hidden bg-black">
+        
+        {/* ── 1. CAMADA DO ROBÔ ── */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
+          <div className="relative w-full h-full lg:w-[160%] lg:-left-[55%] transition-all duration-1000 ease-out">
+              <SplineScene
+                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                className="w-full h-full"
+                onLoad={() => setIsLoaded(true)}
+              />
+          </div>
+        </div>
+
+        {/* ── 2. GRADIENTE ── */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-black/90 z-0 pointer-events-none" />
+
+        {/* ── 3. CAMADA DE CONTEÚDO ── */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 h-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 items-center pointer-events-none">
+          
+          <div className="hidden lg:block h-full" />
+
+          <motion.div
+            className="flex flex-col gap-8 lg:pl-12 text-left"
+            initial="hidden"
+            animate={isLoaded ? "visible" : "hidden"} 
+            variants={containerVariants}
+          >
+            <Spotlight className="-top-40 left-0 md:left-20 md:-top-20" fill="white" />
+
+            <motion.div variants={itemVariants} className="relative h-24 md:h-32 w-full pointer-events-auto overflow-visible">
+              <GooeyText
+                texts={["Code.", "Automate.", "Scale."]}
+                morphTime={0.6}
+                cooldownTime={1.5}
+                className="w-full h-full"
+                textClassName="text-5xl md:text-7xl font-black tracking-tighter text-white"
+              />
             </motion.div>
 
-            {/* Heading */}
-            <motion.div variants={itemVariants} className="space-y-1">
-              <h1 className="text-5xl md:text-6xl xl:text-7xl font-bold leading-[0.95] tracking-tight text-foreground">
-                Sites &
-              </h1>
-              <h1
-                className="text-5xl md:text-6xl xl:text-7xl font-bold leading-[0.95] tracking-tight text-glow"
-                style={{ color: 'hsl(var(--primary))' }}
-              >
-                Automação.
-              </h1>
-            </motion.div>
-
-            {/* Description */}
             <motion.p
               variants={itemVariants}
-              className="text-base md:text-lg leading-relaxed max-w-md"
-              style={{ color: 'hsl(var(--muted-foreground))' }}
+              className="text-lg text-zinc-400 max-w-lg leading-relaxed pointer-events-auto"
             >
-              Desenvolvo interfaces modernas e fluxos automatizados que transformam
-              processos manuais em sistemas inteligentes e escaláveis.
+              Transformo processos lentos em softwares ágeis. 
+              Do design do site à automação, eu crio o ecossistema que sua empresa precisa para escalar.
             </motion.p>
 
-            {/* Feature badges */}
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
-              {featureBadges.map(({ icon: Icon, label }) => (
-                <span
-                  key={label}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border"
-                  style={{
-                    background: 'hsl(var(--muted))',
-                    borderColor: 'hsl(var(--border))',
-                    color: 'hsl(var(--muted-foreground))',
-                  }}
-                >
-                  <Icon size={12} />
-                  {label}
-                </span>
-              ))}
-            </motion.div>
-
-            {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
+            <motion.div variants={itemVariants} className="flex flex-wrap gap-4 pt-2 pointer-events-auto">
               <Button
                 size="lg"
-                className="group gap-2 font-semibold"
-                style={{
-                  background: 'hsl(var(--primary))',
-                  color: 'hsl(var(--primary-foreground))',
-                }}
+                onClick={() => scrollToSection('projetos')} // Ação para rolar até Projetos
+                className="rounded-full px-8 py-6 text-base font-semibold bg-white text-black hover:bg-zinc-200 transition-all shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] group cursor-pointer"
               >
-                Ver Projetos
-                <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                Projetos Ativos
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
+              
               <Button
                 size="lg"
                 variant="outline"
-                className="gap-2 font-semibold"
-                style={{
-                  borderColor: 'hsl(var(--border))',
-                  color: 'hsl(var(--foreground))',
-                }}
+                onClick={() => scrollToSection('contato')} // Ação para rolar até Contato
+                className="rounded-full px-8 py-6 text-base font-semibold border-zinc-800 text-white hover:bg-zinc-900 hover:border-violet-500/50 transition-all cursor-pointer"
               >
-                <Zap size={16} style={{ color: 'hsl(var(--primary))' }} />
-                Automações
-                <ExternalLink size={14} className="opacity-50" />
+                Contato
               </Button>
             </motion.div>
-          </motion.div>
 
-          {/* ── RIGHT: 3D Scene ── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-            className="relative"
-          >
-            <SpotlightCard className="relative overflow-hidden" spotlightColor="hsl(186 100% 50% / 0.06)">
-              {/* Scene container */}
-              <div className="relative h-[400px] md:h-[520px] lg:h-[600px]">
-                <SplineScene
-                  scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                  className="w-full h-full"
-                />
-
-                {/* Overlay gradient at bottom */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
-                  style={{
-                    background: 'linear-gradient(to top, hsl(var(--card)), transparent)',
-                  }}
-                />
-              </div>
-
-              {/* Status bar */}
-              <div
-                className="px-5 py-3 flex items-center justify-between border-t"
-                style={{ borderColor: 'hsl(var(--border))' }}
-              >
-                <div className="flex items-center gap-2">
-                  <motion.div
-                    className="w-2 h-2 rounded-full"
-                    style={{ background: 'hsl(var(--primary))' }}
-                    animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                  />
-                  <span
-                    className="text-xs font-mono tracking-widest"
-                    style={{ color: 'hsl(var(--primary))' }}
-                  >
-                    SISTEMA DE AUTOMAÇÃO ATIVO
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  {[0, 1, 2].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="w-1 rounded-full"
-                      style={{ background: 'hsl(var(--primary) / 0.6)', height: `${8 + i * 4}px` }}
-                      animate={{ scaleY: [1, 1.8, 1] }}
-                      transition={{
-                        duration: 0.8,
-                        repeat: Infinity,
-                        delay: i * 0.15,
-                        ease: 'easeInOut',
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </SpotlightCard>
-
-            {/* Glow behind card */}
-            <div
-              className="absolute -inset-px rounded-xl pointer-events-none"
-              style={{
-                boxShadow: '0 0 60px -10px hsl(var(--primary) / 0.15)',
-              }}
-            />
           </motion.div>
 
         </div>
-      </div>
-
-      {/* Bottom fade */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-        style={{ background: 'linear-gradient(to top, hsl(var(--background)), transparent)' }}
-      />
-    </section>
+      </section>
+    </>
   );
 }

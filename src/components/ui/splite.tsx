@@ -5,20 +5,21 @@ const Spline = lazy(() => import('@splinetool/react-spline'));
 interface SplineSceneProps {
   scene: string;
   className?: string;
+  onLoad?: () => void; // Adicionamos a função de aviso aqui
 }
 
-export function SplineScene({ scene, className }: SplineSceneProps) {
+export function SplineScene({ scene, className, onLoad }: SplineSceneProps) {
   return (
-    <Suspense
+    <Suspense 
       fallback={
-        <div className="w-full h-full flex items-center justify-center bg-muted/10 animate-pulse rounded-lg">
-          <span className="text-muted-foreground text-xs font-mono tracking-widest">
-            INICIALIZANDO_SISTEMA...
-          </span>
-        </div>
+        <div className="w-full h-full bg-transparent" />
       }
     >
-      <Spline scene={scene} className={className} />
+      <Spline 
+        scene={scene} 
+        className={className} 
+        onLoad={onLoad} // Repassamos o aviso para o Spline original
+      />
     </Suspense>
   );
 }
