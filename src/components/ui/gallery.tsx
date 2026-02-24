@@ -6,11 +6,11 @@ import { CardSwiper } from "@/components/ui/card-swiper";
 
 // ... (DADOS DOS SERVIÇOS PERMANECEM OS MESMOS)
 const services = [
-  { id: 1, order: 0, x: "-320px", y: "40px", rotate: -12, zIndex: 10, title: 'Automação & Bots', description: 'Fluxos n8n e chatbots transformando atendimento manual em automático.', src: 'https://i.postimg.cc/yxL4mX2x/BOT.jpg' },
-  { id: 2, order: 1, x: "-160px", y: "-30px", rotate: 8, zIndex: 40, title: 'Inteligência Artificial', description: 'Agentes inteligentes para otimizar atendimento e decisões empresariais.', src: 'https://i.postimg.cc/G3KCndtG/IA.jpg' },
-  { id: 3, order: 2, x: "0px", y: "50px", rotate: -6, zIndex: 20, title: 'Engenharia de Software', description: 'Sistemas sob medida e ferramentas web de alta performance.', src: 'https://i.postimg.cc/1XvhGcb3/PROGRAMACAO.jpg' },
-  { id: 4, order: 3, x: "160px", y: "-40px", rotate: 14, zIndex: 15, title: 'Cloud & M365', description: 'Arquitetura em nuvem e gestão Microsoft 365 para eficiência.', src: 'https://i.postimg.cc/3JwHKV0V/M365.jpg' },
-  { id: 5, order: 4, x: "320px", y: "20px", rotate: -16, zIndex: 50, title: 'SaaS & Web', description: 'Criação de plataformas completas, prontas para escalar.', src: 'https://i.postimg.cc/FFp4XNzW/SAAS.jpg' },
+  { id: 1, order: 0, x: "-320px", y: "40px", rotate: -12, zIndex: 10, title: 'Automação & Bots', description: 'Fluxos n8n e chatbots transformando atendimento manual em automático.', src: 'https://i.postimg.cc/rFDtcJXt/BOT.webp' },
+  { id: 2, order: 1, x: "-160px", y: "-30px", rotate: 8, zIndex: 40, title: 'Inteligência Artificial', description: 'Agentes inteligentes para otimizar atendimento e decisões empresariais.', src: 'https://i.postimg.cc/gkx6dDF3/IA.webp' },
+  { id: 3, order: 2, x: "0px", y: "50px", rotate: -6, zIndex: 20, title: 'Engenharia de Software', description: 'Sistemas sob medida e ferramentas web de alta performance.', src: 'https://i.postimg.cc/SNnzqrF8/PROGRAMACAO.webp' },
+  { id: 4, order: 3, x: "160px", y: "-40px", rotate: 14, zIndex: 15, title: 'Cloud & M365', description: 'Arquitetura em nuvem e gestão Microsoft 365 para eficiência.', src: 'https://i.postimg.cc/sDbG2hsS/M365.webp' },
+  { id: 5, order: 4, x: "320px", y: "20px", rotate: -16, zIndex: 50, title: 'SaaS & Web', description: 'Criação de plataformas completas, prontas para escalar.', src: 'https://i.postimg.cc/pXmnxZbF/SAAS.webp' },
 ];
 
 export const PhotoGallery = ({ animationDelay = 0.5 }: { animationDelay?: number }) => {
@@ -90,6 +90,8 @@ export const PhotoCard = ({ src, title, description }: { src: string; title: str
         src={src}
         alt={title}
         draggable={false}
+        loading="lazy" 
+        decoding="async"
       />
       
       {/* GLASSMORPHISM: Substituído o roxo sólido por um efeito de vidro */}
